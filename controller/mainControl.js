@@ -5,45 +5,48 @@ import mainInverter from "./get/mainInverter.js";
 import postToServer from "./post/axios/postToServer.js";
 
 const mainControl = async () => {
-  const dataRMS = await mainRms();
-  const dataInverter = await mainInverter();
-  let queryrms = { where: { device: "rms" } };
-  let dataintervalrms = await getInterval(queryrms);
-  let queryinverter = { where: { device: "inverter" } };
-  let dataintervalinverter = await getInterval(queryinverter);
-  //   console.log("data mainControl datainterval: ", datainterval.post_interval);
-  var taskRMS = cron.schedule(
-    `*/${dataintervalrms.post_interval} * * * * *`,
-    async () => {
-      if (dataRMS != undefined) {
-        dataRMS.forEach(async (element) => {
-          // console.log("data mainControl rms element: data masuk");
+  try {
+    const dataRMS = await mainRms();
+    const dataInverter = await mainInverter();
+    let queryrms = { where: { device: "rms" } };
+    let dataintervalrms = await getInterval(queryrms);
+    let queryinverter = { where: { device: "inverter" } };
+    let dataintervalinverter = await getInterval(queryinverter);
+    //   console.log("data mainControl datainterval: ", datainterval.post_interval);
+    var taskRMS = cron.schedule(
+      `*/${dataintervalrms.post_interval} * * * * *`,
+      async () => {
+        if (dataRMS != undefined) {
+          dataRMS.forEach(async (element) => {
+            // console.log("data mainControl rms element: data masuk");
             await postToServer(element, "RMS", element.UUID_User, "", "");
-        });
+          });
+        }
+      },
+      {
+        scheduled: false,
       }
-    },
-    {
-      scheduled: false,
-    }
-  );
+    );
 
-  var taskInverter = cron.schedule(
-    `*/${dataintervalinverter.post_interval} * * * * *`,
-    async () => {
-      if (dataRMS != undefined) {
-        dataInverter.forEach(async (element) => {
-          // console.log("data mainControl inverter element:", element);
-          await postToServer(element, "Inverter", element.UUID_User, "", "");
-        });
+    var taskInverter = cron.schedule(
+      `*/${dataintervalinverter.post_interval} * * * * *`,
+      async () => {
+        if (dataRMS != undefined) {
+          dataInverter.forEach(async (element) => {
+            // console.log("data mainControl inverter element:", element);
+            await postToServer(element, "Inverter", element.UUID_User, "", "");
+          });
+        }
+      },
+      {
+        scheduled: false,
       }
-    },
-    {
-      scheduled: false,
-    }
-  );
+    );
 
-
-  return [taskRMS,taskInverter];
+    return [taskRMS, taskInverter];
+  } catch (error) {
+    console.log("error mainControl :", error);
+  }
 };
 
 export default mainControl;
