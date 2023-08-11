@@ -21,6 +21,9 @@ class InverterModel {
         this.total_active_power_mw = data.total_active_power_mw;
         this.pm_dc_high_voltage_side_voltage_mv = data.pm_dc_high_voltage_side_voltage_mv;
         this.pm_dc_high_voltage_side_current_ma = data.pm_dc_high_voltage_side_current_ma;
+        // this.code = data.code
+        // this.UUID_User = data.UUID_User;
+        // this.rack_sn = data.rack_sn;
     }
 }
 

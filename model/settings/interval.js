@@ -1,26 +1,20 @@
 import { DataTypes } from "sequelize";
 import DBSETTINGS from "../../config/settings/database.js";
 
-const Rack = DBSETTINGS.define("Rack", {
-  rack_sn: {
+const Interval = DBSETTINGS.define("Interval", {
+  device: {
     type: DataTypes.STRING,
     primaryKey: true,
   },
-  uuid_user: {
-    type: DataTypes.STRING,
-  },
-  rms_ip: {
-    type: DataTypes.STRING,
-  },
-  inverter_ip: {
-    type: DataTypes.STRING,
+  post_interval: {
+    type: DataTypes.INTEGER,
   },
 });
 
-export default Rack;
+export default Interval;
 
 (async () => {
   // await DBSETTINGS.sync({ alter: true });
   await DBSETTINGS.sync();
-  console.log("Rack Table is ready");
+  console.log("Interval Table is ready");
 })();
