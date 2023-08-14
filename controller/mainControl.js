@@ -3,19 +3,28 @@ import getInterval from "./get/database/getInterval.js";
 import mainRms from "./get/mainRms.js";
 import mainInverter from "./get/mainInverter.js";
 import postToServer from "./post/axios/postToServer.js";
+import Interval from "../model/settings/interval.js";
+
 
 const mainControl = async () => {
   try {
-    const dataRMS = await mainRms();
-    const dataInverter = await mainInverter();
+    const intervalCount = await Interval.count();
+    if (intervalCount === 0) {
+      await Interval.upsert({ device: "rms", post_interval: 5 });
+      await Interval.upsert({ device: "inverter", post_interval: 5 });
+      console.log("Data default Interval is Inserted.");
+    } else {
+      console.log("Data interval is ready");
+    }
     let queryrms = { where: { device: "rms" } };
     let dataintervalrms = await getInterval(queryrms);
     let queryinverter = { where: { device: "inverter" } };
     let dataintervalinverter = await getInterval(queryinverter);
     //   console.log("data mainControl datainterval: ", datainterval.post_interval);
     var taskRMS = cron.schedule(
-      `*/${dataintervalrms.post_interval} * * * * *`,
+      `*/${dataintervalrms.post_interval} * * * * * `,
       async () => {
+        const dataRMS = await mainRms();
         if (dataRMS != undefined) {
           dataRMS.forEach(async (element) => {
             // console.log("data mainControl rms element: data masuk");
@@ -29,9 +38,10 @@ const mainControl = async () => {
     );
 
     var taskInverter = cron.schedule(
-      `*/${dataintervalinverter.post_interval} * * * * *`,
+      `*/${dataintervalinverter.post_interval} * * * * * `,
       async () => {
-        if (dataRMS != undefined) {
+        const dataInverter = await mainInverter();
+        if (dataInverter != undefined) {
           dataInverter.forEach(async (element) => {
             // console.log("data mainControl inverter element:", element);
             await postToServer(element, "Inverter", element.UUID_User, "", "");

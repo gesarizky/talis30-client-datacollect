@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 3000;
 dotenv.config();
 app.use(express.json());
 [taskRMS, taskInverter] = await mainControl();
-// taskRMS.start();
-// taskInverter.start();
+taskRMS.start();
+taskInverter.start();
 
 app.get("/", async (req, res) => {
   res.json({ status: 200, message: "Our node.js app works" });
