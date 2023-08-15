@@ -1,5 +1,4 @@
 import axios from "axios";
-import InverterModel from "../../../model/respons/InverterModel.js";
 import InverterBaseModel from "../../../model/respons/InverterBaseModel.js";
 
 const getInverter = async (url, datauser, datarack) => {

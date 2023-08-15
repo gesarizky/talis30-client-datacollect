@@ -1,12 +1,12 @@
 import { DataTypes } from "sequelize";
-import DBHISTORY from "../../config/history/database";
+import DBHISTORY from "../../config/history/database.js";
 
 const Inverter = DBHISTORY.define("inverter", {
   UUID_User: {
     type: DataTypes.STRING,
   },
   data: {
-    type: DataTypes.STRING,
+    type: DataTypes.JSON,
   },
 });
 

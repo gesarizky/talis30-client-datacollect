@@ -1,13 +1,14 @@
 import axios from "axios";
-// import deleteTimestampPost from "../delete/deleteTimestampPost";
-// import storeTimestampPost from "../store/storeTimestampPost";
-import formatObject from "../../../model/function/formatObject.js";
-// import storeTimestampAlert from "../store/storeTimestampAlert";
 import dotenv from "dotenv";
+import sendLocalToServer from "./sendLocalToServer.js";
+import formatObject from "../../../model/function/formatObject.js";
+import postToLocal from "../database/postToLocal.js";
 import InverterModel from "../../../model/respons/InverterModel.js";
+import RMS from "../../../model/history/rms.js";
+import Inverter from "../../../model/history/inverter.js";
 dotenv.config();
 
-const postToServer = async (data, label, uuid_user, id, dataFrom) => {
+const postToServer = async (data, label, uuid_user) => {
   try {
     let dataFormat;
     if (data.code != "404") {
@@ -42,34 +43,29 @@ const postToServer = async (data, label, uuid_user, id, dataFrom) => {
                 }
             }`;
 
-    // const queryStore = { label: label, data: data };
-    // const queryDelete = { where: { id: id } };
     axios
       .post(url, { query }, { headers: { "Content-Type": "application/json" } })
       .then(async (response) => {
         console.log(
-          "🚀 ~ file: postToServer.js:37 ~ .then ~ response:",
+          "🚀 ~ file: postToServer.js: ~ .then ~ response:",
           response.status
         );
-        // ! Handle the response data
-        // if (dataFrom == "database" && response.status == 200) {
-        //     await deleteTimestampPost(queryDelete);
-        // }
+        const rmsCount = await RMS.count();
+        const inverterCount = await Inverter.count();
+        if (rmsCount !== 0 || inverterCount !== 0) {
+          await sendLocalToServer();
+        }
       })
       .catch(async (error) => {
         console.log(
-          "🚀 ~ file: postToServer.js:44 ~ postToServer ~ error:",
-          error
+          "🚀 ~ file: postToServer.js: ~ postToServer ~ error:"
+          //   error
         );
-        // ! Handle any errors
-        // if (dataFrom != "database") {
-        //     await storeTimestampPost(queryStore)
-        // }
+        await postToLocal(data, label, uuid_user);
       });
     return;
   } catch (error) {
-    console.log("error CTPP-404 postToServer :", error);
-    // await storeTimestampAlert({ data: "CTPP-404" })
+    console.log("error : postToServer :", error);
     return "error";
   }
 };

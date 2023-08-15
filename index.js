@@ -5,6 +5,9 @@ import Interval from "./model/settings/interval.js";
 import mainRms from "./controller/get/mainRms.js";
 import mainInverter from "./controller/get/mainInverter.js";
 import mainControl from "./controller/mainControl.js";
+import getLocalRMS from "./controller/get/database/getLocalRms.js";
+import getLocalInverter from "./controller/get/database/getLocalInverter.js";
+import sendLocalToServer from "./controller/post/axios/sendLocalToServer.js";
 var taskRMS;
 var taskInverter;
 
@@ -144,6 +147,36 @@ app.post("/stop", async (req, res) => {
     res.json({ status: 200, message: "post stoped" });
   } catch (error) {
     throw ("error index : post/stop :", error);
+  }
+});
+
+app.post("/sendlocal", async (req, res) => {
+  try {
+    await sendLocalToServer();
+    res.json({ status: 200, message: "send is success" });
+  } catch (error) {
+    throw ("error index : post/stop :", error);
+  }
+});
+
+
+// DATABASE LOCAL
+
+app.get("/database/rms", async (req, res) => {
+  try {
+    const response = await getLocalRMS();
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/database/rms :", error);
+  }
+});
+
+app.get("/database/inverter", async (req, res) => {
+  try {
+    const response = await getLocalInverter();
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/database/inverter :", error);
   }
 });
 

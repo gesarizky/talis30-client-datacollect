@@ -5,7 +5,6 @@ import mainInverter from "./get/mainInverter.js";
 import postToServer from "./post/axios/postToServer.js";
 import Interval from "../model/settings/interval.js";
 
-
 const mainControl = async () => {
   try {
     const intervalCount = await Interval.count();
@@ -28,7 +27,7 @@ const mainControl = async () => {
         if (dataRMS != undefined) {
           dataRMS.forEach(async (element) => {
             // console.log("data mainControl rms element: data masuk");
-            await postToServer(element, "RMS", element.UUID_User, "", "");
+            await postToServer(element, "RMS", element.UUID_User);
           });
         }
       },
@@ -44,7 +43,7 @@ const mainControl = async () => {
         if (dataInverter != undefined) {
           dataInverter.forEach(async (element) => {
             // console.log("data mainControl inverter element:", element);
-            await postToServer(element, "Inverter", element.UUID_User, "", "");
+            await postToServer(element, "Inverter", element.UUID_User);
           });
         }
       },
