@@ -7,6 +7,7 @@ import InverterModel from "../../../model/respons/InverterModel.js";
 import RMS from "../../../model/history/rms.js";
 import Inverter from "../../../model/history/inverter.js";
 dotenv.config();
+let sendLocalToServerCalled = false;
 
 const postToServer = async (data, label, uuid_user) => {
   try {
@@ -52,7 +53,11 @@ const postToServer = async (data, label, uuid_user) => {
         );
         const rmsCount = await RMS.count();
         const inverterCount = await Inverter.count();
-        if (rmsCount !== 0 || inverterCount !== 0) {
+        if (
+          !sendLocalToServerCalled &&
+          (rmsCount !== 0 || inverterCount !== 0)
+        ) {
+          sendLocalToServerCalled = true;
           await sendLocalToServer();
         }
       })
@@ -62,6 +67,7 @@ const postToServer = async (data, label, uuid_user) => {
           //   error
         );
         await postToLocal(data, label, uuid_user);
+        sendLocalToServerCalled = false;
       });
     return;
   } catch (error) {
