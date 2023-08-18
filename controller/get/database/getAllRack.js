@@ -9,3 +9,4 @@ const getAllRack = async (params) => {
 };
 
 export default getAllRack;
+

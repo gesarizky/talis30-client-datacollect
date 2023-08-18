@@ -1,7 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
-import Rack from "./model/settings/Rack.js";
 import Interval from "./model/settings/interval.js";
+import Rack from "./model/settings/Rack.js";
+import RMS1 from "./model/settings/RMS.js";
+import Inverter1 from "./model/settings/Inverter.js";
 import mainRms from "./controller/get/mainRms.js";
 import mainInverter from "./controller/get/mainInverter.js";
 import mainControl from "./controller/mainControl.js";
@@ -67,6 +69,7 @@ app.delete("/interval/:device", async (req, res) => {
   }
 });
 
+
 // RACK
 
 app.post("/rack", async (req, res) => {
@@ -83,7 +86,7 @@ app.get("/rack", async (req, res) => {
     const response = await Rack.findAll();
     res.json({ status: 200, data: response });
   } catch (error) {
-    throw ("error index : get/rack :", error);
+    throw ("error index : get/rack1 :", error);
   }
 });
 
@@ -93,7 +96,7 @@ app.get("/rack/:rack_sn", async (req, res) => {
     const response = await Rack.findOne({ where: { rack_sn: requestedRack } });
     res.json({ status: 200, data: response });
   } catch (error) {
-    throw ("error index : get/rack/:rack_sn :", error);
+    throw ("error index : get/rack1/:rack_sn :", error);
   }
 });
 
@@ -103,7 +106,143 @@ app.delete("/rack/:rack_sn", async (req, res) => {
     await Rack.destroy({ where: { rack_sn: requestedRack } });
     res.json({ status: 200, message: `Data Rack ${requestedRack} is deleted` });
   } catch (error) {
-    throw ("error index : get/rack/:rack_sn :", error);
+    throw ("error index : get/rack1/:rack_sn :", error);
+  }
+});
+
+// RMS1
+
+app.post("/rms1", async (req, res) => {
+  try {
+    await RMS1.upsert(req.body);
+    res.json({ status: 200, message: "RMS1 is inserted" });
+  } catch (error) {
+    throw ("error index : post/rms1 :", error);
+  }
+});
+
+app.get("/rms1", async (req, res) => {
+  try {
+    const response = await RMS1.findAll();
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/rms1 :", error);
+  }
+});
+
+app.get("/rms1/:device_sn", async (req, res) => {
+  try {
+    const requestedDevice = req.params.device_sn;
+    const response = await RMS1.findOne({
+      where: { device_sn: requestedDevice },
+    });
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/rms1/:device_sn :", error);
+  }
+});
+
+app.delete("/rms1/:device_sn", async (req, res) => {
+  try {
+    const requestedDevice = req.params.device_sn;
+    await RMS1.destroy({ where: { device_sn: requestedDevice } });
+    res.json({
+      status: 200,
+      message: `Data RMS1 ${requestedDevice} is deleted`,
+    });
+  } catch (error) {
+    throw ("error index : get/rms1/:device_sn :", error);
+  }
+});
+
+
+// RMS1
+
+app.post("/rms1", async (req, res) => {
+  try {
+    await RMS1.upsert(req.body);
+    res.json({ status: 200, message: "RMS1 is inserted" });
+  } catch (error) {
+    throw ("error index : post/rms1 :", error);
+  }
+});
+
+app.get("/rms1", async (req, res) => {
+  try {
+    const response = await RMS1.findAll();
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/rms1 :", error);
+  }
+});
+
+app.get("/rms1/:device_sn", async (req, res) => {
+  try {
+    const requestedDevice = req.params.device_sn;
+    const response = await RMS1.findOne({
+      where: { device_sn: requestedDevice },
+    });
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/rms1/:device_sn :", error);
+  }
+});
+
+app.delete("/rms1/:device_sn", async (req, res) => {
+  try {
+    const requestedDevice = req.params.device_sn;
+    await RMS1.destroy({ where: { device_sn: requestedDevice } });
+    res.json({
+      status: 200,
+      message: `Data RMS1 ${requestedDevice} is deleted`,
+    });
+  } catch (error) {
+    throw ("error index : get/rms1/:device_sn :", error);
+  }
+});
+
+// Inverter1
+
+app.post("/inverter1", async (req, res) => {
+  try {
+    await Inverter1.upsert(req.body);
+    res.json({ status: 200, message: "Inverter1 is inserted" });
+  } catch (error) {
+    throw ("error index : post/inverter1 :", error);
+  }
+});
+
+app.get("/inverter1", async (req, res) => {
+  try {
+    const response = await Inverter1.findAll();
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/inverter1 :", error);
+  }
+});
+
+app.get("/inverter1/:device_sn", async (req, res) => {
+  try {
+    const requestedDevice = req.params.device_sn;
+    const response = await Inverter1.findOne({
+      where: { device_sn: requestedDevice },
+    });
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/inverter1/:device_sn :", error);
+  }
+});
+
+app.delete("/inverter1/:device_sn", async (req, res) => {
+  try {
+    const requestedDevice = req.params.device_sn;
+    await Inverter1.destroy({ where: { device_sn: requestedDevice } });
+    res.json({
+      status: 200,
+      message: `Data Inverter1 ${requestedDevice} is deleted`,
+    });
+  } catch (error) {
+    throw ("error index : get/inverter1/:device_sn :", error);
   }
 });
 
