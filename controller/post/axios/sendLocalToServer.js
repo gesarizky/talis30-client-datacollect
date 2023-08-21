@@ -1,8 +1,10 @@
 import postToServer from "./postToServer.js";
 import getLocalInverter from "../../get/database/getLocalInverter.js";
 import getLocalRMS from "../../get/database/getLocalRms.js";
+import getLocalMPPT from "../../get/database/getLocalMPPT.js";
 import RMS from "../../../model/history/rms.js";
 import Inverter from "../../../model/history/inverter.js";
+import MPPTHISTORY from "../../../model/history/mppt.js";
 
 const sendLocalToServer = async () => {
   const dataRMS = await getLocalRMS();
@@ -36,6 +38,24 @@ const sendLocalToServer = async () => {
       } catch (err) {
         console.log(
           "🚀 ~ file: sendLocalToServer.js inverter ~ .then ~ error:",
+          err
+        );
+      }
+    }
+  }
+  const dataMPPT = await getLocalMPPT();
+  if (dataMPPT != undefined) {
+    for (const element of dataMPPT) {
+      try {
+        await postToServer(element.data, "MPPT", element.UUID_User);
+        await MPPTHISTORY.destroy({ where: { id: element.id } });
+        console.log(
+          "🚀 ~ file: sendLocalToServer.js MPPT ~ .then ~ response:",
+          200
+        );
+      } catch (err) {
+        console.log(
+          "🚀 ~ file: sendLocalToServer.js MPPT ~ .then ~ error:",
           err
         );
       }

@@ -4,8 +4,11 @@ import sendLocalToServer from "./sendLocalToServer.js";
 import formatObject from "../../../model/function/formatObject.js";
 import postToLocal from "../database/postToLocal.js";
 import InverterModel from "../../../model/respons/InverterModel.js";
+import MPPTModel from "../../../model/respons/MPPTModel.js";
 import RMS from "../../../model/history/rms.js";
 import Inverter from "../../../model/history/inverter.js";
+import MPPTHISTORY from "../../../model/history/mppt.js";
+
 dotenv.config();
 let sendLocalToServerCalled = false;
 
@@ -23,16 +26,24 @@ const postToServer = async (data, label, uuid_user) => {
               else dataRMS += "{" + formatObject(data.cms_data[i]) + "},";
           }
         }
-        dataFormat = `rack_sn: ${data.rack_sn}, cms_data: [ ${dataRMS} ]`;
-      } else {
+        dataFormat = `rack_sn: ${data.rack_sn}, rms_sn: ${data.rms_sn},cms_data: [ ${dataRMS} ]`;
+      } else if (label == "Inverter") {
         // console.log("data raw :",data);
         let newdata = new InverterModel(data.inverter_data);
         let dataInverter = "{" + formatObject(newdata) + "}";
-        dataFormat = `rack_sn: ${data.rack_sn}, inverter_data: [ ${dataInverter} ]`;
+        dataFormat = `rack_sn: ${data.rack_sn}, inverter_sn: ${data.inverter_sn},inverter_data: [ ${dataInverter} ]`;
+      } else {
+        let newdata = new MPPTModel(data.mppt_data);
+        let dataMPPT = "{" + formatObject(newdata) + "}";
+        dataFormat = `rack_sn: ${data.rack_sn},  mppt_sn: ${data.mppt_sn},mppt_data: [ ${dataMPPT} ]`;
       }
     } else {
-      if (label == "RMS") dataFormat = `rack_sn: ${data.rack_sn}, cms_data: []`;
-      else dataFormat = `rack_sn: ${data.rack_sn}, inverter_data: []`;
+      if (label == "RMS")
+        dataFormat = `rack_sn: ${data.rack_sn}, rms_sn: ${data.rms_sn}, cms_data: []`;
+      else if (label == "Inverter")
+        dataFormat = `rack_sn: ${data.rack_sn}, inverter_sn: ${data.inverter_sn},inverter_data: []`;
+      else
+        dataFormat = `rack_sn: ${data.rack_sn}, mppt_sn: ${data.mppt_sn},mppt_data: []`;
     }
 
     // console.log("data format :", dataFormat);
@@ -53,9 +64,10 @@ const postToServer = async (data, label, uuid_user) => {
         );
         const rmsCount = await RMS.count();
         const inverterCount = await Inverter.count();
+        const mpptCount = await MPPTHISTORY.count();
         if (
           !sendLocalToServerCalled &&
-          (rmsCount !== 0 || inverterCount !== 0)
+          (rmsCount !== 0 || inverterCount !== 0 || mpptCount !== 0)
         ) {
           sendLocalToServerCalled = true;
           await sendLocalToServer();

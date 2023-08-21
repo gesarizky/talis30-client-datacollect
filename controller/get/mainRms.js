@@ -14,7 +14,8 @@ const mainRms = async () => {
           const url = `http://${rmsIp}/get-cms-data`;
           const uuid = response[i].uuid_user;
           const rack = response[i].rack_sn;
-          const data = await getRMS(url, uuid, rack);
+          const sn = rmsList[j].rms_sn;
+          const data = await getRMS(url, uuid, rack, sn);
           resultData.push(data);
         }
       }

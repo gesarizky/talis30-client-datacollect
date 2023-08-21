@@ -3,7 +3,7 @@ import DBSETTINGS from "../../config/settings/database.js";
 import Rack from "./Rack.js";
 
 const Inverter1 = DBSETTINGS.define("inverter", {
-  device_sn: {
+  inverter_sn: {
     type: DataTypes.STRING,
     primaryKey: true,
   },

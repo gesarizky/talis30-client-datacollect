@@ -4,22 +4,27 @@ import Interval from "./model/settings/interval.js";
 import Rack from "./model/settings/Rack.js";
 import RMS1 from "./model/settings/RMS.js";
 import Inverter1 from "./model/settings/Inverter.js";
+import MPPT from "./model/settings/Mppt.js";
 import mainRms from "./controller/get/mainRms.js";
 import mainInverter from "./controller/get/mainInverter.js";
+import mainMppt from "./controller/get/mainMppt.js";
 import mainControl from "./controller/mainControl.js";
 import getLocalRMS from "./controller/get/database/getLocalRms.js";
 import getLocalInverter from "./controller/get/database/getLocalInverter.js";
 var taskRMS;
 var taskInverter;
+var taskMPPT;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 dotenv.config();
 app.use(express.json());
-[taskRMS, taskInverter] = await mainControl();
+[taskRMS, taskInverter, taskMPPT] = await mainControl();
 taskRMS.start();
 taskInverter.start();
+taskMPPT.start();
+
 
 app.get("/", async (req, res) => {
   res.json({ status: 200, message: "Our node.js app works" });
@@ -130,76 +135,31 @@ app.get("/rms1", async (req, res) => {
   }
 });
 
-app.get("/rms1/:device_sn", async (req, res) => {
+app.get("/rms1/:rms_sn", async (req, res) => {
   try {
-    const requestedDevice = req.params.device_sn;
+    const requestedDevice = req.params.rms_sn;
     const response = await RMS1.findOne({
-      where: { device_sn: requestedDevice },
+      where: { rms_sn: requestedDevice },
     });
     res.json({ status: 200, data: response });
   } catch (error) {
-    throw ("error index : get/rms1/:device_sn :", error);
+    throw ("error index : get/rms1/:rms_sn :", error);
   }
 });
 
-app.delete("/rms1/:device_sn", async (req, res) => {
+app.delete("/rms1/:rms_sn", async (req, res) => {
   try {
-    const requestedDevice = req.params.device_sn;
-    await RMS1.destroy({ where: { device_sn: requestedDevice } });
+    const requestedDevice = req.params.rms_sn;
+    await RMS1.destroy({ where: { rms_sn: requestedDevice } });
     res.json({
       status: 200,
       message: `Data RMS1 ${requestedDevice} is deleted`,
     });
   } catch (error) {
-    throw ("error index : get/rms1/:device_sn :", error);
+    throw ("error index : get/rms1/:rms_sn :", error);
   }
 });
 
-
-// RMS1
-
-app.post("/rms1", async (req, res) => {
-  try {
-    await RMS1.upsert(req.body);
-    res.json({ status: 200, message: "RMS1 is inserted" });
-  } catch (error) {
-    throw ("error index : post/rms1 :", error);
-  }
-});
-
-app.get("/rms1", async (req, res) => {
-  try {
-    const response = await RMS1.findAll();
-    res.json({ status: 200, data: response });
-  } catch (error) {
-    throw ("error index : get/rms1 :", error);
-  }
-});
-
-app.get("/rms1/:device_sn", async (req, res) => {
-  try {
-    const requestedDevice = req.params.device_sn;
-    const response = await RMS1.findOne({
-      where: { device_sn: requestedDevice },
-    });
-    res.json({ status: 200, data: response });
-  } catch (error) {
-    throw ("error index : get/rms1/:device_sn :", error);
-  }
-});
-
-app.delete("/rms1/:device_sn", async (req, res) => {
-  try {
-    const requestedDevice = req.params.device_sn;
-    await RMS1.destroy({ where: { device_sn: requestedDevice } });
-    res.json({
-      status: 200,
-      message: `Data RMS1 ${requestedDevice} is deleted`,
-    });
-  } catch (error) {
-    throw ("error index : get/rms1/:device_sn :", error);
-  }
-});
 
 // Inverter1
 
@@ -221,28 +181,73 @@ app.get("/inverter1", async (req, res) => {
   }
 });
 
-app.get("/inverter1/:device_sn", async (req, res) => {
+app.get("/inverter1/:inverter_sn", async (req, res) => {
   try {
-    const requestedDevice = req.params.device_sn;
+    const requestedDevice = req.params.rms_sn;
     const response = await Inverter1.findOne({
-      where: { device_sn: requestedDevice },
+      where: { inverter_sn: requestedDevice },
     });
     res.json({ status: 200, data: response });
   } catch (error) {
-    throw ("error index : get/inverter1/:device_sn :", error);
+    throw ("error index : get/inverter1/:rms_sn :", error);
   }
 });
 
-app.delete("/inverter1/:device_sn", async (req, res) => {
+app.delete("/inverter1/:inverter_sn", async (req, res) => {
   try {
-    const requestedDevice = req.params.device_sn;
-    await Inverter1.destroy({ where: { device_sn: requestedDevice } });
+    const requestedDevice = req.params.inverter_sn;
+    await Inverter1.destroy({ where: { inverter_sn: requestedDevice } });
     res.json({
       status: 200,
       message: `Data Inverter1 ${requestedDevice} is deleted`,
     });
   } catch (error) {
-    throw ("error index : get/inverter1/:device_sn :", error);
+    throw ("error index : get/inverter1/:inverter_sn :", error);
+  }
+});
+
+// MPPT1
+
+app.post("/mppt1", async (req, res) => {
+  try {
+    await MPPT.upsert(req.body);
+    res.json({ status: 200, message: "mppt is inserted" });
+  } catch (error) {
+    throw ("error index : post/mppt :", error);
+  }
+});
+
+app.get("/mppt1", async (req, res) => {
+  try {
+    const response = await MPPT.findAll();
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/mppt :", error);
+  }
+});
+
+app.get("/mppt1/:mppt_sn", async (req, res) => {
+  try {
+    const requestedDevice = req.params.mppt_sn;
+    const response = await MPPT.findOne({
+      where: { mppt_sn: requestedDevice },
+    });
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get//mppt/:mppt_sn :", error);
+  }
+});
+
+app.delete("/mppt1/:mppt_sn", async (req, res) => {
+  try {
+    const requestedDevice = req.params.mppt_sn;
+    await MPPT.destroy({ where: { mppt_sn: requestedDevice } });
+    res.json({
+      status: 200,
+      message: `Data MPPT ${requestedDevice} is deleted`,
+    });
+  } catch (error) {
+    throw ("error index : get/mppt/:mppt_sn :", error);
   }
 });
 
@@ -266,12 +271,22 @@ app.get("/inverter", async (req, res) => {
   }
 });
 
+app.get("/mppt", async (req, res) => {
+  try {
+    const response = await mainMppt();
+    res.json({ status: 200, data: response });
+  } catch (error) {
+    throw ("error index : get/mppt :", error);
+  }
+});
+
 // CONTROLL
 
 app.post("/start", async (req, res) => {
   try {
     taskRMS.start();
     taskInverter.start();
+    taskMPPT.start();
     res.json({ status: 200, message: "post started" });
   } catch (error) {
     throw ("error index : post/start :", error);
@@ -282,6 +297,7 @@ app.post("/stop", async (req, res) => {
   try {
     taskRMS.stop();
     taskInverter.stop();
+    taskMPPT.stop();
     res.json({ status: 200, message: "post stoped" });
   } catch (error) {
     throw ("error index : post/stop :", error);
