@@ -234,7 +234,7 @@ app.get("/mppt1/:mppt_sn", async (req, res) => {
     });
     res.json({ status: 200, data: response });
   } catch (error) {
-    throw ("error index : get//mppt/:mppt_sn :", error);
+    throw ("error index : get/mppt/:mppt_sn :", error);
   }
 });
 

@@ -25,7 +25,7 @@ const mainControl = async () => {
     let dataintervalmppt = await getInterval(querymppt);
     //   console.log("data mainControl datainterval: ", datainterval.post_interval);
     var taskRMS = cron.schedule(
-      `*/${dataintervalrms.post_interval} * * * * * `,
+      `*/${dataintervalrms.post_interval} * * * *  `,
       async () => {
         const dataRMS = await mainRms();
         if (dataRMS != undefined) {
@@ -41,7 +41,7 @@ const mainControl = async () => {
     );
 
     var taskInverter = cron.schedule(
-      `*/${dataintervalinverter.post_interval} * * * * * `,
+      `*/${dataintervalinverter.post_interval} * * * *  `,
       async () => {
         const dataInverter = await mainInverter();
         if (dataInverter != undefined) {
@@ -57,7 +57,7 @@ const mainControl = async () => {
     );
 
     var taskMPPT = cron.schedule(
-      `*/${dataintervalmppt.post_interval} * * * * * `,
+      `*/${dataintervalmppt.post_interval} * * * *  `,
       async () => {
         const dataMPPT = await mainMppt();
         if (dataMPPT != undefined) {

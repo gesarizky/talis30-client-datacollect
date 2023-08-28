@@ -1,6 +1,5 @@
 import MPPTModel from "./MPPTModel.js";
 class MPPTBaseModel {
-  if
   constructor(data) {
     this.code = data.code;
     this.UUID_User = data.UUID_User;

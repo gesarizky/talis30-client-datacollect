@@ -13,8 +13,6 @@ const getMPPT = async (url, datauser, datarack, datasn) => {
   } catch (error) {
     data = new MPPTBaseModel({
       mppt_data: [],
-      mppt_sn: datasn,
-      rack_sn: datarack,
     });
     data.code = 404;
     data.UUID_User = datauser;
