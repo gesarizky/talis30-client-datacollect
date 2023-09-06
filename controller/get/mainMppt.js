@@ -12,8 +12,8 @@ const mainMppt = async () => {
         const mpptList = response[i].mppt; // Access the array of mppt
         for (let j = 0; j < mpptList.length; j++) {
           const mpptIp = mpptList[j].mppt_ip; // Access mppt_ip for each element
-          //   const url = `http://${mpptIp}/get-data`;
-          const url = `http://${mpptIp}`;
+          const url = `http://${mpptIp}/get-data`;
+          // const url = `http://${mpptIp}`;
           const uuid = response[i].uuid_user;
           const rack = response[i].rack_sn;
           const sn = mpptList[j].mppt_sn;

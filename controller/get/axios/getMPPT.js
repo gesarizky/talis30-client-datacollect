@@ -4,6 +4,9 @@ const getMPPT = async (url, datauser, datarack, datasn) => {
   let data;
   try {
     const respons = await axios.get(url, { timeout: 5000 });
+    if (respons.data.connected_module == 0) {
+      throw new Error();
+    }
     data = new MPPTBaseModel(respons.data);
     data.code = 200;
     data.UUID_User = datauser;
