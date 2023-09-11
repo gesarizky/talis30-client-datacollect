@@ -1,6 +1,12 @@
 import Inverter1 from "../../model/settings/Inverter.js";
 import getAllRack from "./database/getAllRack.js";
 import getInverter from "./axios/getInverter.js";
+
+/**
+ * @description fetching dan menampilkan data tiap device inverter yang ada di database
+ * @returns hasil semua proses dari inverter 
+ */
+
 const mainInverter = async () => {
   try {
     const query = { include: [{ model: Inverter1, as: "inverter" }] };

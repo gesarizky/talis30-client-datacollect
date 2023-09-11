@@ -1,5 +1,14 @@
 import axios from "axios";
 import MPPTBaseModel from "../../../model/respons/MPPTBaseModel.js";
+
+/**
+ *@description fetching atau pengambilan data device MPPT dan di destructuring  
+ * @param {String} url alamat ip device mppt
+ * @param {String} datauser uuid_user
+ * @param {String} datarack rack_sn
+ * @param {String} datasn mppt_sn
+ * @returns data yang sudah di destructuring
+ */
 const getMPPT = async (url, datauser, datarack, datasn) => {
   let data;
   try {

@@ -1,6 +1,10 @@
 import { DataTypes } from "sequelize";
 import DBSETTINGS from "../../config/settings/database.js";
 
+/**
+ * @description model tabel invertal di settings db
+ */
+
 const Interval = DBSETTINGS.define("Interval", {
   device: {
     type: DataTypes.STRING,

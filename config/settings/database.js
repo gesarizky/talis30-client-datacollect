@@ -9,6 +9,10 @@ const DATABASE_HOST_SETTINGS = process.env.DATABASE_HOST_SETTINGS;
 const DATABASE_TYPE_SETTINGS = process.env.DATABASE_TYPE_SETTINGS;
 const DATABASE_LOGGING_SETTINGS = process.env.DATABSE_LOGGING_SETTINGS;
 
+/**
+ * @description inisiasi config database setting dari env
+ */
+
 const DBSETTINGS = new Sequelize(
   DATABASE_SETTINGS,
   DATABASE_USERNAME_SETTINGS,

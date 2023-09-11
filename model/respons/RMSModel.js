@@ -1,5 +1,9 @@
 import CMSModel from "./CMSModel.js";
 
+/**
+ * @description constructor data rack
+ */
+
 class RMSModel {
   constructor(data) {
     this.cms_data = data.cms_data.map((frame) => new CMSModel(frame));

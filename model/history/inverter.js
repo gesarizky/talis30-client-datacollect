@@ -1,6 +1,10 @@
 import { DataTypes } from "sequelize";
 import DBHISTORY from "../../config/history/database.js";
 
+/**
+ * @description model tabel inverter di history db
+ */
+
 const Inverter = DBHISTORY.define("inverter", {
   UUID_User: {
     type: DataTypes.STRING,

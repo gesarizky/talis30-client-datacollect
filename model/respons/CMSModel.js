@@ -1,3 +1,8 @@
+
+/**
+ * @description constructor data cell
+ */
+
 class CMSModel {
     constructor(data) {
         this.msg_count = data.msg_count;

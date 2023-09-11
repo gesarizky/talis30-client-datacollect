@@ -1,6 +1,12 @@
 import mainRms from "../controller/get/mainRms.js";
 import mainInverter from "../controller/get/mainInverter.js";
 import mainMppt from "../controller/get/mainMppt.js";
+
+/**
+ * @description routing untuk fetching data
+ * @param {*} app 
+ */
+
 const dataFetching = async (app) => {
   // FETCHING DATA
 

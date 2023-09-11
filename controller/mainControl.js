@@ -6,6 +6,11 @@ import mainMppt from "./get/mainMppt.js";
 import postToServer from "./post/axios/postToServer.js";
 import Interval from "../model/settings/interval.js";
 
+/**
+ * @description kontrol utama mengirim data device ke server graphql
+ * @returns mengembalikan task
+ */
+
 const mainControl = async () => {
   try {
     const intervalCount = await Interval.count();

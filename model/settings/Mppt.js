@@ -2,6 +2,10 @@ import { DataTypes } from "sequelize";
 import DBSETTINGS from "../../config/settings/database.js";
 import Rack from "./Rack.js";
 
+/**
+ * @description model tabel MPPT di settings database
+ */
+
 const MPPT = DBSETTINGS.define("mppt", {
   mppt_sn: {
     type: DataTypes.STRING,

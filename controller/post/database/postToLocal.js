@@ -1,6 +1,14 @@
 import postRMS from "./postRMS.js";
 import postInverter from "./postInverter.js";
 import postMPPT from "./postMPPT.js";
+
+/**
+ * @description mengirim data device ke database local
+ * @param {*} data data device
+ * @param {String} label device
+ * @param {String} uuid_user uuid_user
+ */
+
 const postToLocal = async (data, label, uuid_user) => {
   try {
     if (label == "RMS") {
@@ -13,8 +21,8 @@ const postToLocal = async (data, label, uuid_user) => {
         })
         .catch(async (error) => {
           console.log(
-            "🚀 ~ file: postToLocal.js: RMS ~ postToServer ~ error:"
-            //   error
+            "🚀 ~ file: postToLocal.js: RMS ~ postToServer ~ error:",
+            error
           );
         });
     } else if (label == "Inverter") {
@@ -27,8 +35,8 @@ const postToLocal = async (data, label, uuid_user) => {
         })
         .catch(async (error) => {
           console.log(
-            "🚀 ~ file: postToLocal.js: Inverter ~ postToServer ~ error:"
-            //   error
+            "🚀 ~ file: postToLocal.js: Inverter ~ postToServer ~ error:",
+            error
           );
         });
     } else {
@@ -41,8 +49,8 @@ const postToLocal = async (data, label, uuid_user) => {
         })
         .catch(async (error) => {
           console.log(
-            "🚀 ~ file: postToLocal.js: MPPT ~ postToServer ~ error:"
-            //   error
+            "🚀 ~ file: postToLocal.js: MPPT ~ postToServer ~ error:",
+            error
           );
         });
     }

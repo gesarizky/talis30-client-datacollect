@@ -1,3 +1,11 @@
+
+/**
+ * @description destructuring object supaya menghapus // dan /n
+ * @param {*} obj data yang akan diubah
+ * @param {*} indent 
+ * @returns 
+ */
+
 const formatObject = (obj, indent = 0) => {
   const spaces = " ".repeat(indent);
   const lines = [];

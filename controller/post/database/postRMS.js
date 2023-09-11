@@ -1,8 +1,13 @@
 import RMS from "../../../model/history/rms.js";
+
+/**
+ * @description mengirim data ke database RMS
+ * @param {*} params query sequelize
+ */
+
 const postRMS = async (params) => {
   try {
-    const data = await RMS.create(params);
-    return data;
+    await RMS.create(params);
   } catch (error) {
     throw ("error postRMS :", error);
   }

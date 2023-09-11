@@ -1,6 +1,12 @@
 import RMS1 from "../../model/settings/RMS.js";
 import getAllRack from "./database/getAllRack.js";
 import getRMS from "./axios/getRMS.js";
+
+/**
+ * @description fetching dan menampilkan data tiap device RMS yang ada di database
+ * @returns hasil semua proses dari RMS 
+ */
+
 const mainRms = async () => {
   try {
     const query = { include: [{ model: RMS1, as: "rms" }] };

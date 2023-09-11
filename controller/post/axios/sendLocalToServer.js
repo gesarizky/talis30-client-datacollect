@@ -6,6 +6,10 @@ import RMS from "../../../model/history/rms.js";
 import Inverter from "../../../model/history/inverter.js";
 import MPPTHISTORY from "../../../model/history/mppt.js";
 
+/**
+ * @description mengirim data database device ke server graphql
+ */
+
 const sendLocalToServer = async () => {
   const dataRMS = await getLocalRMS();
   if (dataRMS != undefined) {

@@ -1,3 +1,8 @@
+
+/**
+ *@description constructor data mppt_data 
+ */
+
 class InverterModel {
   constructor(data) {
     this.system_dc_side_voltage_mv = data.system_dc_side_voltage_mv;

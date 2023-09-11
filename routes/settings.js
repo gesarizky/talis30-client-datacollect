@@ -3,6 +3,12 @@ import Rack from "../model/settings/Rack.js";
 import RMS1 from "../model/settings/RMS.js";
 import Inverter1 from "../model/settings/Inverter.js";
 import MPPT from "../model/settings/Mppt.js";
+
+/**
+ * @description routing untuk database setting
+ * @param {*} app 
+ */
+
 const dataSetting = async (app)=>{
   // INTERVAL
 

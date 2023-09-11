@@ -1,4 +1,9 @@
 import MPPTModel from "./MPPTModel.js";
+
+/**
+ * @description constructor data mppt
+ */
+
 class MPPTBaseModel {
   constructor(data) {
     this.code = data.code;

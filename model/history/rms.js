@@ -1,6 +1,10 @@
 import { DataTypes } from "sequelize";
 import DBHISTORY from "../../config/history/database.js";
 
+/**
+ * @description model tabel RMS di history db
+ */
+
 const RMS = DBHISTORY.define("rms", {
   UUID_User: {
     type: DataTypes.STRING,

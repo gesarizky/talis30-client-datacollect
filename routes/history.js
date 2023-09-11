@@ -1,6 +1,12 @@
 import getLocalInverter from "../controller/get/database/getLocalInverter.js";
 import getLocalMPPT from "../controller/get/database/getLocalMPPT.js";
 import getLocalRMS from "../controller/get/database/getLocalRms.js";
+
+/**
+ * @description routing untuk database history
+ * @param {*} app 
+ */
+
 const dataHistory = async (app) => {
   // DATABASE LOCAL
 

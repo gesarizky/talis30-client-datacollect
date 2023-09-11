@@ -1,8 +1,12 @@
 import Inverter from "../../../model/history/inverter.js";
+/**
+ * @description mengirim data ke database inverter
+ * @param {*} params query sequelize
+ */
+
 const postInverter = async (params) => {
   try {
-    const data = await Inverter.create(params);
-    return data;
+    await Inverter.create(params);
   } catch (error) {
     throw ("error Inverter :", error);
   }

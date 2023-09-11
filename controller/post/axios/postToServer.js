@@ -12,6 +12,13 @@ import MPPTHISTORY from "../../../model/history/mppt.js";
 dotenv.config();
 let sendLocalToServerCalled = false;
 
+/**
+ * @description mengirim data device ke server graphql
+ * @param {*} data data device
+ * @param {String} label device
+ * @param {String} uuid_user uuid_user
+ */
+
 const postToServer = async (data, label, uuid_user) => {
   try {
     let dataFormat;
@@ -46,8 +53,6 @@ const postToServer = async (data, label, uuid_user) => {
         dataFormat = `rack_sn: ${data.rack_sn}, mppt_sn: ${data.mppt_sn},mppt_data: []`;
     }
 
-    // console.log("data format :", dataFormat);
-
     const url = process.env.URL_HASURA;
     const query = `mutation ($UUID_User: String = "${uuid_user}", $data: json = {${dataFormat}}) {
                 insert_${label}_one(object: {UUID_User: $UUID_User, data: $data}) {
@@ -81,7 +86,6 @@ const postToServer = async (data, label, uuid_user) => {
         await postToLocal(data, label, uuid_user);
         sendLocalToServerCalled = false;
       });
-    return;
   } catch (error) {
     console.log("error : postToServer :", error);
     return "error";

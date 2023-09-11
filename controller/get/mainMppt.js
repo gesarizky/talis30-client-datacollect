@@ -2,6 +2,11 @@ import getAllRack from "./database/getAllRack.js";
 import getMPPT from "./axios/getMPPT.js";
 import MPPT from "../../model/settings/Mppt.js";
 
+/**
+ * @description fetching dan menampilkan data tiap device MPPT yang ada di database
+ * @returns hasil semua proses dari MPPT 
+ */
+
 const mainMppt = async () => {
   try {
     const query = { include: [{ model: MPPT, as: "mppt" }] };

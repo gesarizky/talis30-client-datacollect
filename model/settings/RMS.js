@@ -2,6 +2,10 @@ import { DataTypes } from "sequelize";
 import DBSETTINGS from "../../config/settings/database.js";
 import Rack from "./Rack.js";
 
+/**
+ * @description model tabel RMS di settings database
+ */
+
 const RMS1 = DBSETTINGS.define("rms", {
   rms_sn: {
     type: DataTypes.STRING,

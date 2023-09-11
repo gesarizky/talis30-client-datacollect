@@ -9,6 +9,10 @@ const DATABASE_HOST_HISTORY = process.env.DATABASE_HOST_HISTORY;
 const DATABASE_TYPE_HISTORY = process.env.DATABASE_TYPE_HISTORY;
 const DATABASE_LOGGING_HISTORY = process.env.DATABSE_LOGGING_HISTORY;
 
+/**
+ * @description inisiasi config untuk database history dari env
+ */
+
 const DBHISTORY = new Sequelize(
   DATABASE_HISTORY,
   DATABASE_USERNAME_HISTORY,

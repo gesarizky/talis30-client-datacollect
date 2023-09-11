@@ -1,4 +1,10 @@
 import MPPTHISTORY from "../../../model/history/mppt.js";
+
+/**
+ * @description mengambil semua data dari database MPPt
+ * @returns hasil findAll
+ */
+
 const getLocalMPPT = async () => {
     try {
       const data = await MPPTHISTORY.findAll();

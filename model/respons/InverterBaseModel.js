@@ -1,4 +1,9 @@
 import InverterModel from "./InverterModel.js";
+
+/**
+ *@description constructor data inverter 
+ */
+
 class InverterBaseModel {
   constructor(data) {
     this.inverter_data = new InverterModel(data);

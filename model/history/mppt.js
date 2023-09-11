@@ -1,6 +1,10 @@
 import { DataTypes } from "sequelize";
 import DBHISTORY from "../../config/history/database.js";
 
+/**
+ * @description model tabel MPPT di history db
+ */
+
 const MPPTHISTORY = DBHISTORY.define("mppt", {
   UUID_User: {
     type: DataTypes.STRING,
