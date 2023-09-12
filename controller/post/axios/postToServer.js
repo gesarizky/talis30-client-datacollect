@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import sendLocalToServer from "./sendLocalToServer.js";
 import formatObject from "../../../model/function/formatObject.js";
 import postToLocal from "../database/postToLocal.js";
+import toIsoString from "./toIsoString.js";
 import InverterModel from "../../../model/respons/InverterModel.js";
 import MPPTModel from "../../../model/respons/MPPTModel.js";
 import RMS from "../../../model/history/rms.js";
@@ -27,7 +28,7 @@ const postToServer = async (data, label, uuid_user) => {
         let dataRMS = "";
         if (!(data.cms_data == 0)) {
           for (let i = 0; i < data.cms_data.length; i++) {
-            if (data.cms_data[i].frame_name != "N/A")
+            if (data.cms_data[i].frame_name != "FRAME-32-NA")
               if (i == data.cms_data.length - 1)
                 dataRMS += "{" + formatObject(data.cms_data[i]) + "}";
               else dataRMS += "{" + formatObject(data.cms_data[i]) + "},";
@@ -53,9 +54,12 @@ const postToServer = async (data, label, uuid_user) => {
         dataFormat = `rack_sn: ${data.rack_sn}, mppt_sn: ${data.mppt_sn},mppt_data: []`;
     }
 
+    var dt = new Date();
+    const timestamp = await toIsoString(dt);
+
     const url = process.env.URL_HASURA;
     const query = `mutation ($UUID_User: String = "${uuid_user}", $data: json = {${dataFormat}}) {
-                insert_${label}_one(object: {UUID_User: $UUID_User, data: $data}) {
+                insert_${label}_one(object: {UUID_User: $UUID_User, data: $data ,timestamp: "${timestamp}"}) {
                     id
                 }
             }`;
