@@ -15,7 +15,12 @@ const sendLocalToServer = async () => {
   if (dataRMS != undefined) {
     for (const element of dataRMS) {
       try {
-        await postToServer(element.data, "RMS", element.UUID_User);
+        await postToServer(
+          element.data,
+          "RMS",
+          element.UUID_User,
+          element.createdAt
+        );
         await RMS.destroy({ where: { id: element.id } });
         console.log(
           "🚀 ~ file: sendLocalToServer.js RMS ~ .then ~ response:",
@@ -33,7 +38,12 @@ const sendLocalToServer = async () => {
   if (dataInverter != undefined) {
     for (const element of dataInverter) {
       try {
-        await postToServer(element.data, "Inverter", element.UUID_User);
+        await postToServer(
+          element.data,
+          "Inverter",
+          element.UUID_User,
+          element.createdAt
+        );
         await Inverter.destroy({ where: { id: element.id } });
         console.log(
           "🚀 ~ file: sendLocalToServer.js inverter ~ .then ~ response:",
@@ -51,7 +61,12 @@ const sendLocalToServer = async () => {
   if (dataMPPT != undefined) {
     for (const element of dataMPPT) {
       try {
-        await postToServer(element.data, "MPPT", element.UUID_User);
+        await postToServer(
+          element.data,
+          "MPPT",
+          element.UUID_User,
+          element.createdAt
+        );
         await MPPTHISTORY.destroy({ where: { id: element.id } });
         console.log(
           "🚀 ~ file: sendLocalToServer.js MPPT ~ .then ~ response:",

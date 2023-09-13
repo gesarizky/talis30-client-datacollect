@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import routes from "./routes/index.js";
 import mainControl from "./controller/mainControl.js";
+import sendLocalToServer from "./controller/post/axios/sendLocalToServer.js";
 var taskRMS;
 var taskInverter;
 var taskMPPT;
@@ -25,7 +26,7 @@ app.post("/start", async (req, res) => {
     taskRMS.start();
     taskInverter.start();
     taskMPPT.start();
-    res.json({ status: 200, message: "post started" });
+    res.json({ status: 200, message: "started" });
   } catch (error) {
     throw ("error index : post/start :", error);
   }
@@ -36,7 +37,16 @@ app.post("/stop", async (req, res) => {
     taskRMS.stop();
     taskInverter.stop();
     taskMPPT.stop();
-    res.json({ status: 200, message: "post stoped" });
+    res.json({ status: 200, message: "stoped" });
+  } catch (error) {
+    throw ("error index : post/stop :", error);
+  }
+});
+
+app.post("/sendlocal", async (req, res) => {
+  try {
+    await sendLocalToServer();
+    res.json({ status: 200, message: "local posted" });
   } catch (error) {
     throw ("error index : post/stop :", error);
   }

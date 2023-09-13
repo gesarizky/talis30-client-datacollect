@@ -18,9 +18,10 @@ let sendLocalToServerCalled = false;
  * @param {*} data data device
  * @param {String} label device
  * @param {String} uuid_user uuid_user
+ * @param {Date} local timestamp local database
  */
 
-const postToServer = async (data, label, uuid_user) => {
+const postToServer = async (data, label, uuid_user, local) => {
   try {
     let dataFormat;
     if (data.code != "404") {
@@ -53,9 +54,11 @@ const postToServer = async (data, label, uuid_user) => {
       else
         dataFormat = `rack_sn: ${data.rack_sn}, mppt_sn: ${data.mppt_sn},mppt_data: []`;
     }
-
-    var dt = new Date();
+    // console.log("local :", local);
+    const dt = local instanceof Date ? local : new Date();
     const timestamp = await toIsoString(dt);
+    // console.log("dt :", dt);
+    // console.log("timestamp :", timestamp);
 
     const url = process.env.URL_HASURA;
     const query = `mutation ($UUID_User: String = "${uuid_user}", $data: json = {${dataFormat}}) {
