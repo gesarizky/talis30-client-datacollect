@@ -14,6 +14,9 @@ const RMS1 = DBSETTINGS.define("rms", {
   rms_ip: {
     type: DataTypes.STRING,
   },
+  config: {
+    type: DataTypes.JSON,
+  },
 });
 
 Rack.hasMany(RMS1, { as: "rms", foreignKey: "rack_sn" });

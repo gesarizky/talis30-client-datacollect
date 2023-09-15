@@ -3,6 +3,8 @@ import getInterval from "./get/database/getInterval.js";
 import mainRms from "./get/mainRms.js";
 import mainInverter from "./get/mainInverter.js";
 import mainMppt from "./get/mainMppt.js";
+import mainProcessRMS from "./process/mainProcessRMS.js";
+import mainRealtime from "./post/mainRealtime.js";
 import postToServer from "./post/axios/postToServer.js";
 import Interval from "../model/settings/interval.js";
 
@@ -77,7 +79,35 @@ const mainControl = async () => {
       }
     );
 
-    return [taskRMS, taskInverter, taskMPPT];
+    var taskRealtime = cron.schedule(
+      `* * * * * *  `,
+      async () => {
+        const dataRMS = await mainRms();
+        if (dataRMS != undefined) {
+          dataRMS.forEach(async (element) => {
+            if (element.code != 404) {
+              console.log("data mainControl mppt element: data masuk", element);
+              let [dataContent, dataHealth] = await mainProcessRMS(element);
+              // console.log(
+              //   `data mainControl element rms diolah: content: ${dataContent} health: ${dataHealth} rack_sn: ${element.rack_sn} rms_sn: ${element.rms_sn}`
+              // );
+              await mainRealtime(
+                dataHealth,
+                dataContent,
+                element.UUID_User,
+                element.rack_sn,
+                element.rms_sn
+              );
+            }
+          });
+        }
+      },
+      {
+        scheduled: false,
+      }
+    );
+
+    return [taskRMS, taskInverter, taskMPPT, taskRealtime];
   } catch (error) {
     console.log("error mainControl :", error);
   }

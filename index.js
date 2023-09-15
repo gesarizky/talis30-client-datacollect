@@ -3,19 +3,17 @@ import dotenv from "dotenv";
 import routes from "./routes/index.js";
 import mainControl from "./controller/mainControl.js";
 import sendLocalToServer from "./controller/post/axios/sendLocalToServer.js";
-var taskRMS;
-var taskInverter;
-var taskMPPT;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 dotenv.config();
 app.use(express.json());
-[taskRMS, taskInverter, taskMPPT] = await mainControl();
+const [taskRMS, taskInverter, taskMPPT, taskRealtime] = await mainControl();
 taskRMS.start();
 taskInverter.start();
 taskMPPT.start();
+taskRealtime.start();
 
 routes(app);
 
