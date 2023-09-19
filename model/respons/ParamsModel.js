@@ -1,3 +1,6 @@
+/**
+ * @description constructor parameter setting
+ */
 class ParamsModel {
   constructor(dataParam) {
     this.note = dataParam.config.note;

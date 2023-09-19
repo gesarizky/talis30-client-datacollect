@@ -1,3 +1,8 @@
+/**
+ * @description fungsi untuk mengubah format iso ke string
+ * @param {Date} date tanggal yang akan diubah
+ * @returns nilai tanggal string
+ */
 const toIsoString = async (date) => {
   var tzo = -date.getTimezoneOffset(),
     dif = tzo >= 0 ? "+" : "-",

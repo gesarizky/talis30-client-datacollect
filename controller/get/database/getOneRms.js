@@ -2,9 +2,9 @@ import Rack from "../../../model/settings/Rack.js";
 import RMS1 from "../../../model/settings/RMS.js";
 
 /**
- * @description mengambil semua data dari database Rack
+ * @description mengambil satu data dari tabel database RMS
  * @param {*} params query sequelize
- * @returns hasil query sequelize findAll
+ * @returns hasil query sequelize findOne
  */
 
 const getOneRms = async (params) => {

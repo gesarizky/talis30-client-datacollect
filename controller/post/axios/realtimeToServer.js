@@ -3,11 +3,16 @@ import dotenv from "dotenv";
 import toIsoString from "./toIsoString.js";
 dotenv.config();
 
-async function fetchDataByData(uuid_user) {
+/**
+ * @description mengambil data rms dari graphql
+ * @param {String} rms_sn serial number rms 
+ * @returns panjang data
+ */
+async function fetchDataByData(rms_sn) {
   const url = process.env.URL_HASURA;
   const query = `query {
-        Realtime(where: {UUID_User: {_eq: "${uuid_user}"}}, limit: 1) {
-            UUID_User
+        Realtime(where: {rms_sn: {_eq: "${rms_sn}"}}, limit: 1) {
+            rms_sn
         }
     }`;
 
@@ -25,16 +30,23 @@ async function fetchDataByData(uuid_user) {
   }
 }
 
-const realtimeToServer = async (data, uuid_user) => {
+/**
+ * @description mengirimkan data realtime ke server graphql
+ * @param {Object} data data realtime device rms
+ * @param {String} uuid_user uuid user device rms
+ * @param {String} rms_sn rms sn device rms
+ */
+
+const realtimeToServer = async (data, uuid_user, rms_sn) => {
   try {
     const url = process.env.URL_HASURA;
-    const existingData = await fetchDataByData(uuid_user);
+    const existingData = await fetchDataByData(rms_sn);
     const date = new Date();
     const timestamp = await toIsoString(date);
 
     if (existingData) {
-      const query = `mutation ($_eq: String = "${uuid_user}", $updatedAt: timestamptz = "${timestamp}", $data: json = ${data}) {
-                update_Realtime(where: {UUID_User: {_eq: $_eq}}, _set: {updatedAt: $updatedAt, data: $data}) {
+      const query = `mutation ($_eq: String = "${rms_sn}", $updatedAt: timestamptz = "${timestamp}", $data: json = ${data}, $UUID_User: String = "${uuid_user}") {
+                update_Realtime(where: {rms_sn: {_eq: $_eq}}, _set: {updatedAt: $updatedAt, data: $data, UUID_User:$UUID_User}) {
                     returning {
                         updatedAt
                     }
@@ -46,15 +58,13 @@ const realtimeToServer = async (data, uuid_user) => {
           { query },
           { headers: { "Content-Type": "application/json" } }
         );
-        return "success";
       } catch (error) {
         console.error("Failed to fetch data:", error);
-        return null;
       }
     } else {
-      const query = `mutation ($UUID_User: String = "${uuid_user}", $data: json = ${data},$updatedAt: timestamptz = "${timestamp}") {
-                            insert_Realtime_one(object: {UUID_User: $UUID_User, data: $data, updatedAt: $updatedAt}) {
-                        UUID_User
+      const query = `mutation ($UUID_User: String = "${uuid_user}", $data: json = ${data},$updatedAt: timestamptz = "${timestamp}",$rms_sn: String = "${rms_sn}") {
+                            insert_Realtime_one(object: {UUID_User: $UUID_User, data: $data, updatedAt: $updatedAt, rms_sn:$rms_sn}) {
+                        rms_sn
                     }
                 }`;
       try {
@@ -63,18 +73,15 @@ const realtimeToServer = async (data, uuid_user) => {
           { query },
           { headers: { "Content-Type": "application/json" } }
         );
-        return "success";
       } catch (error) {
         console.error("Failed to fetch data:", error.message);
-        return null;
       }
     }
   } catch (error) {
     console.log(
       "🚀 ~ file: realtimeToServer.js:54 ~ realtimeToServer ~ error:",
-      error
+      error.message
     );
-    return "error";
   }
 };
 
