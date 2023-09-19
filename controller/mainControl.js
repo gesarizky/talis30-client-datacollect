@@ -86,7 +86,7 @@ const mainControl = async () => {
         if (dataRMS != undefined) {
           dataRMS.forEach(async (element) => {
             if (element.code != 404) {
-              console.log("data mainControl mppt element: data masuk", element);
+              // console.log("data mainControl mppt element: data masuk", element);
               let [dataContent, dataHealth] = await mainProcessRMS(element);
               // console.log(
               //   `data mainControl element rms diolah: content: ${dataContent} health: ${dataHealth} rack_sn: ${element.rack_sn} rms_sn: ${element.rms_sn}`
