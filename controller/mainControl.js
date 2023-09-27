@@ -30,11 +30,12 @@ const mainControl = async () => {
     let dataintervalinverter = await getInterval(queryinverter);
     let querymppt = { where: { device: "mppt" } };
     let dataintervalmppt = await getInterval(querymppt);
+    const dataRMS = await mainRms();
+    const dataInverter = await mainInverter();
     //   console.log("data mainControl datainterval: ", datainterval.post_interval);
     var taskRMS = cron.schedule(
       `*/${dataintervalrms.post_interval} * * * *  `,
       async () => {
-        const dataRMS = await mainRms();
         if (dataRMS != undefined) {
           dataRMS.forEach(async (element) => {
             // console.log("data mainControl rms element: data masuk");
@@ -50,7 +51,7 @@ const mainControl = async () => {
     var taskInverter = cron.schedule(
       `*/${dataintervalinverter.post_interval} * * * *  `,
       async () => {
-        const dataInverter = await mainInverter();
+        // const dataInverter = await mainInverter();
         if (dataInverter != undefined) {
           dataInverter.forEach(async (element) => {
             // console.log("data mainControl inverter element:", element);
@@ -82,21 +83,32 @@ const mainControl = async () => {
     var taskRealtime = cron.schedule(
       `* * * * * *  `,
       async () => {
-        const dataRMS = await mainRms();
         if (dataRMS != undefined) {
           dataRMS.forEach(async (element) => {
             if (element.code != 404) {
-              // console.log("data mainControl mppt element: data masuk", element);
               let [dataContent, dataHealth] = await mainProcessRMS(element);
-              // console.log(
-              //   `data mainControl element rms diolah: content: ${dataContent} health: ${dataHealth} rack_sn: ${element.rack_sn} rms_sn: ${element.rms_sn}`
-              // );
+              const data = `{ health: ${dataHealth}, content: ${dataContent}, rack_sn: ${element.rack_sn}}`;
+              await mainRealtime(data, element.UUID_User, element.rms_sn,"");
+            }
+          });
+        }
+      },
+      {
+        scheduled: false,
+      }
+    );
+
+    var taskRealtimeRms = cron.schedule(
+      `* * * * * *  `,
+      async () => {
+        if (dataRMS != undefined) {
+          dataRMS.forEach(async (element) => {
+            if (element.code != 404) {
               await mainRealtime(
-                dataHealth,
-                dataContent,
+                element,
                 element.UUID_User,
-                element.rack_sn,
-                element.rms_sn
+                element.rms_sn,
+                "RMS"
               );
             }
           });
@@ -107,7 +119,35 @@ const mainControl = async () => {
       }
     );
 
-    return [taskRMS, taskInverter, taskMPPT, taskRealtime];
+    var taskRealtimeInverter = cron.schedule(
+      `* * * * * *  `,
+      async () => {
+        if (dataInverter != undefined) {
+          dataInverter.forEach(async (element) => {
+            if (element.code != 404) {
+              await mainRealtime(
+                element,
+                element.UUID_User,
+                element.rms_sn,
+                "Inverter"
+              );
+            }
+          });
+        }
+      },
+      {
+        scheduled: false,
+      }
+    );
+
+    return [
+      taskRMS,
+      taskInverter,
+      taskMPPT,
+      taskRealtime,
+      taskRealtimeRms,
+      taskRealtimeInverter,
+    ];
   } catch (error) {
     console.log("error mainControl :", error);
   }

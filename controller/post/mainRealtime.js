@@ -1,4 +1,6 @@
 import realtimeToServer from "./axios/realtimeToServer.js";
+import formatObject from "../../model/function/formatObject.js";
+import InverterModel from "../../model/respons/InverterModel.js";
 /**
  * @description membuat struktur baru dari data realtime
  * @param {Number} health nilai health batere
@@ -8,10 +10,28 @@ import realtimeToServer from "./axios/realtimeToServer.js";
  * @param {String} rms_sn nilai rms sn
  */
 
-const mainRealtime = async (health, content, uuid_user, rack_sn, rms_sn) => {
+const mainRealtime = async (data, uuid_user, rms_sn, label) => {
   try {
-    const data = `{ health: ${health}, content: ${content}, rack_sn: ${rack_sn}}`;
-    await realtimeToServer(data, uuid_user, rms_sn);
+    let dataformat = "";
+    if (label == "") dataformat = data;
+    if (label == "RMS") {
+      let dataRMS = "";
+      if (!(data.cms_data == 0)) {
+        for (let i = 0; i < data.cms_data.length; i++) {
+          if (data.cms_data[i].frame_name != "FRAME-32-NA")
+            if (i == data.cms_data.length - 1)
+              dataRMS += "{" + formatObject(data.cms_data[i]) + "}";
+            else dataRMS += "{" + formatObject(data.cms_data[i]) + "},";
+        }
+      }
+      dataformat = `{cms_data: [ ${dataRMS} ],rack_sn: ${data.rack_sn}}`;
+    }
+    if (label == "Inverter") {
+      let newdata = new InverterModel(data.inverter_data);
+      let dataInverter = "{" + formatObject(newdata) + "}";
+      dataformat = `{rack_sn: ${data.rack_sn},inverter_data: [ ${dataInverter} ]}`;
+    }
+    await realtimeToServer(dataformat, uuid_user, rms_sn, label);
   } catch (error) {
     console.log("error : file : ~ mainRealtime.js : ", error);
   }

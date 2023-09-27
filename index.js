@@ -9,11 +9,19 @@ const PORT = process.env.PORT || 3000;
 
 dotenv.config();
 app.use(express.json());
-const [taskRMS, taskInverter, taskMPPT, taskRealtime] = await mainControl();
-taskRMS.start();
-taskInverter.start();
-taskMPPT.start();
+const [
+  taskRMS,
+  taskInverter,
+  taskMPPT,
+  taskRealtime,
+  taskRealtimeRms,
+  taskRealtimeInverter,
+] = await mainControl();
+// taskRMS.start();
+// taskInverter.start();
+// taskMPPT.start();
 taskRealtime.start();
+taskRealtimeRms.start();
 
 routes(app);
 
