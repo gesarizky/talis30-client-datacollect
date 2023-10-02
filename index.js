@@ -17,9 +17,9 @@ const [
   taskRealtimeRms,
   taskRealtimeInverter,
 ] = await mainControl();
-// taskRMS.start();
-// taskInverter.start();
-// taskMPPT.start();
+taskRMS.start();
+taskInverter.start();
+taskMPPT.start();
 taskRealtime.start();
 taskRealtimeRms.start();
 
@@ -33,6 +33,7 @@ app.post("/start", async (req, res) => {
     taskInverter.start();
     taskMPPT.start();
     taskRealtime.start();
+    taskRealtimeRms.start();
     res.json({ status: 200, message: "started" });
   } catch (error) {
     throw ("error index : post/start :", error);
@@ -45,6 +46,7 @@ app.post("/stop", async (req, res) => {
     taskInverter.stop();
     taskMPPT.stop();
     taskRealtime.stop();
+    taskRealtimeRms.stop();
     res.json({ status: 200, message: "stoped" });
   } catch (error) {
     throw ("error index : post/stop :", error);
