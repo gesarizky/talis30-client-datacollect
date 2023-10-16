@@ -88,7 +88,7 @@ const mainControl = async () => {
             if (element.code != 404) {
               let [dataContent, dataHealth] = await mainProcessRMS(element);
               const data = `{ health: ${dataHealth}, content: ${dataContent}, rack_sn: ${element.rack_sn}}`;
-              await mainRealtime(data, element.UUID_User, element.rms_sn,"");
+              await mainRealtime(data, element.UUID_User, element.rms_sn, "");
             }
           });
         }
@@ -128,7 +128,7 @@ const mainControl = async () => {
               await mainRealtime(
                 element,
                 element.UUID_User,
-                element.rms_sn,
+                element.inverter_sn,
                 "Inverter"
               );
             }

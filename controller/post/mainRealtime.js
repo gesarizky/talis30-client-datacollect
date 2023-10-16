@@ -10,7 +10,7 @@ import InverterModel from "../../model/respons/InverterModel.js";
  * @param {String} rms_sn nilai rms sn
  */
 
-const mainRealtime = async (data, uuid_user, rms_sn, label) => {
+const mainRealtime = async (data, uuid_user, device_sn, label) => {
   try {
     let dataformat = "";
     if (label == "") dataformat = data;
@@ -30,8 +30,9 @@ const mainRealtime = async (data, uuid_user, rms_sn, label) => {
       let newdata = new InverterModel(data.inverter_data);
       let dataInverter = "{" + formatObject(newdata) + "}";
       dataformat = `{rack_sn: ${data.rack_sn},inverter_data: [ ${dataInverter} ]}`;
+      // console.log(dataformat);
     }
-    await realtimeToServer(dataformat, uuid_user, rms_sn, label);
+    await realtimeToServer(dataformat, uuid_user, device_sn, label);
   } catch (error) {
     console.log("error : file : ~ mainRealtime.js : ", error);
   }
